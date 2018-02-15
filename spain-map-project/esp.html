@@ -5,7 +5,7 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="https://rawgit.com/Anujarya300/bubble_maps/master/data/geography-data/datamaps.none.js"></script>
-    <div id="india" style="height: 600px; width: 900px;"></div>
+    <div id="esp" style="height: 1500px; width: 1500px;"></div>
     <script>
         var bubble_map = new Datamap({
             element: document.getElementById('esp'),
@@ -25,17 +25,17 @@
                 defaultFill: '#dddddd'
             },
             data: {
-                'JH': {
+                'AN': {
                     fillKey: 'MINOR'
                 },
-                'MH': {
+                'AS': {
                     fillKey: 'MINOR'
                 }
             },
             setProjection: function(element) {
                 var projection = d3.geo.mercator()
-                    .center([78.9629, 23.5937]) // always in [East Latitude, North Longitude]
-                    .scale(1000);
+                    .center([-10.030031, 40.533429]) // always in [East Latitude, North Longitude]
+                    .scale(2000);
                 var path = d3.geo.path().projection(projection);
                 return {
                     path: path,
@@ -44,11 +44,18 @@
             }
         });
         let bubbles = [{
-            centered: "PV",
-            fillKey: "MAJOR",
-            radius: 20,
-            state: "Pais Vasco"
-        }]
+                centered: "VC",
+                fillKey: "MAJOR",
+                radius: 20,
+                state: "Castellón"
+            },
+            {
+                centered: "CT",
+                fillKey: "MAJOR",
+                radius: 20,
+                state: "Gerona"
+            }
+        ]
         // // ISO ID code for city or <state></state>
         setTimeout(() => { // only start drawing bubbles on the map when map has rendered completely.
             bubble_map.bubbles(bubbles, {
