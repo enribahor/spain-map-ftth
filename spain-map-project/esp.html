@@ -5,6 +5,7 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="https://rawgit.com/Anujarya300/bubble_maps/master/data/geography-data/datamaps.none.js"></script>
+    <div id="canary-islands" style="height: 1500px; width: 1500px"></div>
     <div id="esp" style="height: 1500px; width: 1500px;"></div>
     <script>
         var bubble_map = new Datamap({
@@ -34,8 +35,8 @@
             },
             setProjection: function(element) {
                 var projection = d3.geo.mercator()
-                    .center([-10.030031, 40.533429]) // always in [East Latitude, North Longitude]
-                    .scale(2000);
+                    .center([-3.0, 42.433429]) // always in [East Latitude, North Longitude]
+                    .scale(4000);
                 var path = d3.geo.path().projection(projection);
                 return {
                     path: path,
