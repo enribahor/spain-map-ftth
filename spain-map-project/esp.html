@@ -8,14 +8,14 @@
     <div id="india" style="height: 600px; width: 900px;"></div>
     <script>
         var bubble_map = new Datamap({
-            element: document.getElementById('india'),
-            scope: 'india',
+            element: document.getElementById('esp'),
+            scope: 'esp',
             geographyConfig: {
                 popupOnHover: true,
                 highlightOnHover: true,
                 borderColor: '#444',
                 borderWidth: 0.5,
-                dataUrl: './assets/esp.topo.json'
+                dataUrl: 'https://rawgit.com/Anujarya300/bubble_maps/master/data/geography-data/india.topo.json'
                 //dataJson: topoJsonData
             },
             fills: {
@@ -44,11 +44,48 @@
             }
         });
         let bubbles = [{
-            centered: "PV",
-            fillKey: "MAJOR",
-            radius: 20,
-            state: "Pais Vasco"
-        }]
+                centered: "MH",
+                fillKey: "MAJOR",
+                radius: 20,
+                state: "Maharastra"
+            },
+            {
+                centered: "AP",
+                fillKey: "MAJOR",
+                radius: 22,
+                state: "Andhra Pradesh"
+            },
+            {
+                centered: "TN",
+                fillKey: "MAJOR",
+                radius: 16,
+                state: "Tamil Nadu"
+            },
+            {
+                centered: "WB",
+                fillKey: "MEDIUM",
+                radius: 15,
+                state: "West Bengal"
+            },
+            {
+                centered: "MP",
+                fillKey: "MEDIUM",
+                radius: 15,
+                state: "Madhya Pradesh"
+            },
+            {
+                centered: "UP",
+                fillKey: "MINOR",
+                radius: 8,
+                state: "Uttar Pradesh"
+            },
+            {
+                centered: "RJ",
+                fillKey: "MINOR",
+                radius: 7,
+                state: "Rajasthan"
+            }
+        ]
         // // ISO ID code for city or <state></state>
         setTimeout(() => { // only start drawing bubbles on the map when map has rendered completely.
             bubble_map.bubbles(bubbles, {
