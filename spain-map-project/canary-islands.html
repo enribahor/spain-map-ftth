@@ -31,8 +31,8 @@
             },
             setProjection: function(element) {
                 var projection = d3.geo.mercator()
-                    .center([10, 10]) // always in [East Latitude, North Longitude]
-                    .scale(500);
+                    .center([-10, 30]) // always in [East Latitude, North Longitude]
+                    .scale(1600);
                 var path = d3.geo.path().projection(projection);
                 return {
                     path: path,
