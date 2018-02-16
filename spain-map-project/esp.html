@@ -5,9 +5,42 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="https://rawgit.com/Anujarya300/bubble_maps/master/data/geography-data/datamaps.none.js"></script>
-    <div id="canary-islands" style="height: 1500px; width: 1500px"></div>
+    <div id="canary-islands" style="height: 500px; width: 500px"></div>
     <div id="esp" style="height: 1500px; width: 1500px;"></div>
     <script>
+        var bubble_canary_islands_map = new Datamap({
+            element: document.getElementById('canary-islands'),
+            scope: 'canary-islands',
+            geographyConfig: {
+                popupOnHover: true,
+                highlightOnHover: true,
+                borderColor: '#444',
+                borderWidth: 0.5,
+                dataUrl: 'https://raw.githubusercontent.com/cvazquezlos/d3-spain-dataset/master/spain-map-project/assets/canary-islands.topo.json'
+                //dataJson: topoJsonData
+            },
+            fills: {
+                'MAJOR': '#306596',
+                'MEDIUM': '#0fa0fa',
+                'MINOR': '#bada55',
+                defaultFill: '#dddddd'
+            },
+            data: {
+                'CI': {
+                    fillKey: 'MINOR'
+                }
+            },
+            setProjection: function(element) {
+                var projection = d3.geo.mercator()
+                    .center([20, 40]) // always in [East Latitude, North Longitude]
+                    .scale(250);
+                var path = d3.geo.path().projection(projection);
+                return {
+                    path: path,
+                    projection: projection
+                };
+            }
+        });
         var bubble_map = new Datamap({
             element: document.getElementById('esp'),
             scope: 'esp',
@@ -44,6 +77,7 @@
                 };
             }
         });
+        let canaryBubbles = []
         let bubbles = [{
                 centered: "VC",
                 fillKey: "MAJOR",
@@ -60,6 +94,11 @@
         // // ISO ID code for city or <state></state>
         setTimeout(() => { // only start drawing bubbles on the map when map has rendered completely.
             bubble_map.bubbles(bubbles, {
+                popupTemplate: function(geo, data) {
+                    return `<div class="hoverinfo">city: ${data.state}, Slums: ${data.radius}%</div>`;
+                }
+            });
+            bubble_canary_islands_map.bubbles(canaryBubbles, {
                 popupTemplate: function(geo, data) {
                     return `<div class="hoverinfo">city: ${data.state}, Slums: ${data.radius}%</div>`;
                 }
