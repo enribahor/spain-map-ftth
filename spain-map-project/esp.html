@@ -20,6 +20,12 @@
                 //dataJson: topoJsonData
             },
             fills: {
+                'SOUTH': '#4CAF50',
+                'NORTH': '#FFEB3B',
+                'CENTER': '#2196F3',
+                'EAST': '#9C27B0',
+                'CAT': '#FF9800',
+                'CAN': '#F44336',
                 'MAJOR': '#306596',
                 'MEDIUM': '#0fa0fa',
                 'MINOR': '#bada55',
@@ -27,8 +33,9 @@
             },
             data: {
                 'CI': {
-                    fillKey: 'MINOR'
+                    fillKey: 'CAN'
                 }
+                
             },
             setProjection: function(element) {
                 var projection = d3.geo.mercator()
@@ -53,17 +60,68 @@
                 //dataJson: topoJsonData
             },
             fills: {
+                'SOUTH': '#4CAF50',
+                'NORTH': '#FFEB3B',
+                'CENTER': '#2196F3',
+                'EAST': '#795548',
+                'CAT': '#FF9800',
+                'CAN': '#F44336',
                 'MAJOR': '#306596',
                 'MEDIUM': '#0fa0fa',
                 'MINOR': '#bada55',
                 defaultFill: '#dddddd'
             },
             data: {
-                'AN': {
-                    fillKey: 'MINOR'
+                'PV': { // NORTH
+                    fillKey: 'NORTH'
                 },
                 'AS': {
-                    fillKey: 'MINOR'
+                    fillKey: 'NORTH'
+                },
+                'AR': {
+                    fillKey: 'NORTH'
+                },
+                'NA': {
+                    fillKey: 'NORTH'
+                },
+                'GA': {
+                    fillKey: 'NORTH'
+                },
+                'LO': {
+                    fillKey: 'NORTH'
+                },
+                'CB': {
+                    fillKey: 'NORTH'
+                },
+                'AN': { // SOUTH
+                    fillKey: 'SOUTH'
+                },
+                'EX': {
+                    fillKey: 'SOUTH'
+                },
+                'CE': {
+                    fillKey: 'SOUTH'
+                },
+                'CM': { // CENTER
+                    fillKey: 'CENTER'
+                },
+                'CL': {
+                    fillKey: 'CENTER'
+                },
+                'MD': {
+                    fillKey: 'CENTER'
+                },
+                'VC': { // EAST
+                    fillKey: 'EAST'
+                },
+                'MU': {
+                    fillKey: 'EAST'
+                },
+                'CT': { // CAT
+                    fillKey: 'CAT'
+                },
+                'PM': {
+                    fillKey: 'CAT'
                 }
             },
             setProjection: function(element) {
@@ -78,19 +136,7 @@
             }
         });
         let canaryBubbles = []
-        let bubbles = [{
-                centered: "VC",
-                fillKey: "MAJOR",
-                radius: 20,
-                state: "Castellón"
-            },
-            {
-                centered: "CT",
-                fillKey: "MAJOR",
-                radius: 20,
-                state: "Gerona"
-            }
-        ]
+        let bubbles = []
         // // ISO ID code for city or <state></state>
         setTimeout(() => { // only start drawing bubbles on the map when map has rendered completely.
             bubble_map.bubbles(bubbles, {
