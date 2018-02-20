@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 
+<head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+    <script src="https://rawgit.com/markmarkoh/datamaps/master/dist/datamaps.world.js"></script>
+
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+
 <body>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://d3js.org/topojson.v1.min.js"></script>
-    <script src="https://rawgit.com/Anujarya300/bubble_maps/master/data/geography-data/datamaps.none.js"></script>
-    <div id="canary-islands" style="height: 700px; width: 500px; float: left"></div>
-    <div id="esp" style="height: 950px; width: 1000px; float: left"></div>
+
+    <div class="container" style="width: 100%">
+        <div class="row">
+            <div class="col-4" id="canary-islands" style="height: 700px; width: 500px"></div>
+            <div class="col-10" id="esp" style="height: 950px; width: 1000px"></div>
+        </div>
+    </div>
     <script>
         var bubble_canary_islands_map = new Datamap({
             element: document.getElementById('canary-islands'),
@@ -16,26 +27,17 @@
                 highlightOnHover: true,
                 borderColor: '#444',
                 borderWidth: 0.5,
-                dataUrl: 'https://raw.githubusercontent.com/cvazquezlos/d3-spain-dataset/master/spain-map-project/assets/canary-islands.topo.json'
-                //dataJson: topoJsonData
+                dataUrl: './assets/canary-islands.topo.json'
             },
             fills: {
-                'SOUTH': '#4CAF50',
-                'NORTH': '#FFEB3B',
-                'CENTER': '#2196F3',
-                'EAST': '#9C27B0',
-                'CAT': '#FF9800',
                 'CAN': '#F44336',
-                'MAJOR': '#306596',
-                'MEDIUM': '#0fa0fa',
-                'MINOR': '#bada55',
                 defaultFill: '#dddddd'
             },
             data: {
                 'CI': {
                     fillKey: 'CAN'
                 }
-                
+
             },
             setProjection: function(element) {
                 var projection = d3.geo.mercator()
@@ -48,82 +50,263 @@
                 };
             }
         });
+        var northPalette = d3.scale.linear()
+            .domain([0.0000000000000, 100.0000000000000])
+            .range(["#FFFDE7", "#FFEB3B"]);
+        var southPalette = d3.scale.linear()
+            .domain([0.0000000000000, 100.0000000000000])
+            .range(["#E8F5E9", "#4CAF50"]);
+        var centerPalette = d3.scale.linear()
+            .domain([0.0000000000000, 100.0000000000000])
+            .range(["#E3F2FD", "#2196F3"]);
+        var eastPalette = d3.scale.linear()
+            .domain([0.0000000000000, 100.0000000000000])
+            .range(["#EFEBE9", "#795548"]);
+        var catPalette = d3.scale.linear()
+            .domain([0.0000000000000, 100.0000000000000])
+            .range(["#FFF3E0", "#FF9800"]);
+        var canPalette = d3.scale.linear()
+            .domain([0.0000000000000, 100.0000000000000])
+            .range(["#EFEBE9", "#795548"]);
+
+        var isos = ["AB", "AL", "AY", "AX", "AS", "AV", "BZ", "BR", "BU", "CA", "CZ", "CR", "CS", "CU", "CE", "CO", "CC", "GI", "GR", "GU", "GK", "HU", "HS", "JA", "AC", "LR", "LE", "LL", "LU", "MD", "MA", "ME", "MU", "NA", "OU", "PA", "PO", "SA", "SE", "SV", "SO", "TA", "TE", "TO", "VA", "VL", "BI", "ZA", "ZR", "IB"];
+        var dataset = {
+            'AB': {
+                fillKey: 'NORTH',
+                percentage: 20.0000000000000
+            },
+            'AL': {
+                fillKey: 'CENTER',
+                percentage: 10.0000000000000
+            },
+            'AY': {
+                fillKey: 'EAST',
+                percentage: 33.0000000000000
+            },
+            'AX': {
+                fillKey: 'SOUTH',
+                percentage: 50.0000000000000
+            },
+            'AS': {
+                fillKey: 'NORTH',
+                percentage: 69.99999999999999
+            },
+            'AV': {
+                fillKey: 'CENTER',
+                percentage: 40.0000000000000
+            },
+            'BZ': {
+                fillKey: 'SOUTH',
+                percentage: 70.0000000000000
+            },
+            'BR': {
+                fillKey: 'CAT',
+                percentage: 29.99999999999999
+            },
+            'BU': {
+                fillKey: 'CENTER',
+                percentage: 60.0000000000000
+            },
+            'CA': {
+                fillKey: 'SOUTH',
+                percentage: 100.0000000000000
+            },
+            'CZ': {
+                fillKey: 'SOUTH',
+                percentage: 80.0000000000000
+            },
+            'CR': {
+                fillKey: 'NORTH',
+                percentage: 20.0000000000000
+            },
+            'CS': {
+                fillKey: 'EAST',
+                percentage: 9.0000000000000
+            },
+            'CU': {
+                fillKey: 'SOUTH',
+                percentage: 39.99999999999999
+            },
+            'CE': {
+                fillKey: 'CENTER',
+                percentage: 20.0000000000000
+            },
+            'CO': {
+                fillKey: 'SOUTH',
+                percentage: 60.0000000000000
+            },
+            'CC': {
+                fillKey: 'CENTER',
+                percentage: 10.0000000000000
+            },
+            'GI': {
+                fillKey: 'CAT',
+                percentage: 99.99999999999999
+            },
+            'GR': {
+                fillKey: 'SOUTH',
+                percentage: 70.0000000000000
+            },
+            'GU': {
+                fillKey: 'CENTER',
+                percentage: 65.0000000000000
+            },
+            'GK': {
+                fillKey: 'NORTH',
+                percentage: 30.0000000000000
+            },
+            'HU': {
+                fillKey: 'SOUTH',
+                percentage: 100.0000000000000
+            },
+            'HS': {
+                fillKey: 'NORTH',
+                percentage: 100.0000000000000
+            },
+            'JA': {
+                fillKey: 'SOUTH',
+                percentage: 69.99999999999999
+            },
+            'AC': {
+                fillKey: 'NORTH',
+                percentage: 30.0000000000000
+            },
+            'LR': {
+                fillKey: 'NORTH',
+                percentage: 20.0000000000000
+            },
+            'LE': {
+                fillKey: 'CENTER',
+                percentage: 100.0000000000000
+            },
+            'LL': {
+                fillKey: 'CAT',
+                percentage: 80.0000000000000
+            },
+            'LU': {
+                fillKey: 'NORTH',
+                percentage: 52.0000000000000
+            },
+            'MD': {
+                fillKey: 'CENTER',
+                percentage: 31.0000000000000
+            },
+            'MA': {
+                fillKey: 'SOUTH',
+                percentage: 60.0000000000000
+            },
+            'ME': {
+                fillKey: 'SOUTH',
+                percentage: 70.0000000000000
+            },
+            'MU': {
+                fillKey: 'EAST',
+                percentage: 0.0000000000000
+            },
+            'NA': {
+                fillKey: 'NORTH',
+                percentage: 0.0000000000000
+            },
+            'OU': {
+                fillKey: 'NORTH',
+                percentage: 100.0000000000000
+            },
+            'PA': {
+                fillKey: 'CENTER',
+                percentage: 100.0000000000000
+            },
+            'PO': {
+                fillKey: 'NORTH',
+                percentage: 100.0000000000000
+            },
+            'SA': {
+                fillKey: 'CENTER',
+                percentage: 100.0000000000000
+            },
+            'SE': {
+                fillKey: 'CENTER',
+                percentage: 100.0000000000000
+            },
+            'SV': {
+                fillKey: 'SOUTH',
+                percentage: 50.0000000000000
+            },
+            'SO': {
+                fillKey: 'CENTER',
+                percentage: 30.0000000000000
+            },
+            'TA': {
+                fillKey: 'CAT',
+                percentage: 4.0000000000000
+            },
+            'TE': {
+                fillKey: 'NORTH',
+                percentage: 80.0000000000000
+            },
+            'TO': {
+                fillKey: 'CENTER',
+                percentage: 100.0000000000000
+            },
+            'VA': {
+                fillKey: 'EAST',
+                percentage: 100.0000000000000
+            },
+            'VL': {
+                fillKey: 'CENTER',
+                percentage: 99.99999999999999
+            },
+            'BI': {
+                fillKey: 'NORTH',
+                percentage: 100.0000000000000
+            },
+            'ZA': {
+                fillKey: 'CENTER',
+                percentage: 100.0000000000000
+            },
+            'ZR': {
+                fillKey: 'NORTH',
+                percentage: 99.99999999999999
+            },
+            'IB': {
+                fillKey: 'EAST',
+                percentage: 100.0000000000000
+            }
+        };
+        isos.forEach(function(iso) {
+            var color;
+            if (dataset[iso].fillKey == 'NORTH') {
+                color = northPalette(dataset[iso].percentage)
+            } else if (dataset[iso].fillKey == 'SOUTH') {
+                color = southPalette(dataset[iso].percentage)
+            } else if (dataset[iso].fillKey == 'CENTER') {
+                color = centerPalette(dataset[iso].percentage)
+            } else if (dataset[iso].fillKey == 'EAST') {
+                color = eastPalette(dataset[iso].percentage)
+            } else if (dataset[iso].fillKey == 'CAT') {
+                color = catPalette(dataset[iso].percentage)
+            } else {
+                color = canPalette(dataset[iso].percentage)
+            }
+            dataset[iso] = {
+                fillKey: dataset[iso].fillKey,
+                percentage: dataset[iso].percentage,
+                fillColor: color
+            }
+        });
+        console.log(dataset);
         var bubble_map = new Datamap({
             element: document.getElementById('esp'),
             scope: 'esp',
             geographyConfig: {
                 popupOnHover: true,
-                highlightOnHover: true,
+            fills: function(geo) {
+                return geo['fillColor'] || '#F5F5F5';
+            },
                 borderColor: '#444',
                 borderWidth: 0.5,
-                dataUrl: 'https://raw.githubusercontent.com/cvazquezlos/d3-spain-dataset/master/spain-map-project/assets/esp.topo.json'
-                //dataJson: topoJsonData
+                dataUrl: './assets/esp.topo.json'
             },
-            fills: {
-                'SOUTH': '#4CAF50',
-                'NORTH': '#FFEB3B',
-                'CENTER': '#2196F3',
-                'EAST': '#795548',
-                'CAT': '#FF9800',
-                'CAN': '#F44336',
-                'MAJOR': '#306596',
-                'MEDIUM': '#0fa0fa',
-                'MINOR': '#bada55',
-                defaultFill: '#dddddd'
-            },
-            data: {
-                'PV': { // NORTH
-                    fillKey: 'NORTH'
-                },
-                'AS': {
-                    fillKey: 'NORTH'
-                },
-                'AR': {
-                    fillKey: 'NORTH'
-                },
-                'NA': {
-                    fillKey: 'NORTH'
-                },
-                'GA': {
-                    fillKey: 'NORTH'
-                },
-                'LO': {
-                    fillKey: 'NORTH'
-                },
-                'CB': {
-                    fillKey: 'NORTH'
-                },
-                'AN': { // SOUTH
-                    fillKey: 'SOUTH'
-                },
-                'EX': {
-                    fillKey: 'SOUTH'
-                },
-                'CE': {
-                    fillKey: 'SOUTH'
-                },
-                'CM': { // CENTER
-                    fillKey: 'CENTER'
-                },
-                'CL': {
-                    fillKey: 'CENTER'
-                },
-                'MD': {
-                    fillKey: 'CENTER'
-                },
-                'VC': { // EAST
-                    fillKey: 'EAST'
-                },
-                'MU': {
-                    fillKey: 'EAST'
-                },
-                'CT': { // CAT
-                    fillKey: 'CAT'
-                },
-                'PM': {
-                    fillKey: 'CAT'
-                }
-            },
+            data: dataset,
             setProjection: function(element) {
                 var projection = d3.geo.mercator()
                     .center([-3.0, 42.433429]) // always in [East Latitude, North Longitude]
@@ -135,21 +318,13 @@
                 };
             }
         });
-        let canaryBubbles = []
-        let bubbles = []
-        // // ISO ID code for city or <state></state>
-        setTimeout(() => { // only start drawing bubbles on the map when map has rendered completely.
-            bubble_map.bubbles(bubbles, {
-                popupTemplate: function(geo, data) {
-                    return `<div class="hoverinfo">city: ${data.state}, Slums: ${data.radius}%</div>`;
-                }
-            });
-            bubble_canary_islands_map.bubbles(canaryBubbles, {
-                popupTemplate: function(geo, data) {
-                    return `<div class="hoverinfo">city: ${data.state}, Slums: ${data.radius}%</div>`;
-                }
-            });
-        }, 1000);
 
     </script>
+
+    <style>
+        .row {
+            display: auto;
+        }
+
+    </style>
 </body>
