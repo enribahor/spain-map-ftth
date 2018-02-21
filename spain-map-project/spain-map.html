@@ -9,19 +9,26 @@
 
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href="assets/css/main.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="container" style="width: 100%">
         <div class="row">
-            <form>
-                <input type="text" name="mes">
-                <input type="submit" value="Visualizar">
-            </form>
+            <div class="col-1"></div>
+            <div class="col-12" align="center">
+                <h1>Percentage of optic fiber installed</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-12">
+                <input type="range" min="1" max="12" value="1" class="slider" id="picker-range">
+            </div>
         </div>
         <div class="row">
             <div class="col-4" id="canary-islands" style="height: 700px; width: 500px"></div>
-            <div class="col-10" id="esp" style="height: 950px; width: 1000px"></div>
+            <div class="col-10" id="peninsula-balears" style="height: 950px; width: 1000px"></div>
         </div>
     </div>
     <script>
@@ -34,16 +41,13 @@
             });
             return json;
         }
-
-        function fill(min, max, value) {
-
+        function resetElement(element) {
+            element.innerHTML = '';
         }
-        var northPalette = d3.scale.linear()
-            .domain([0.0000000000000, 100.0000000000000])
-            .range(["#FFFDE7", "#FFEB3B"]);
-        var mes = document.URL.split("=")[1];
-        var meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
-        if (meses.includes(mes)) {
+        var slider = document.getElementById("picker-range");
+        slider.oninput = function() {
+            var meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+            var mes = meses[this.value - 1];
             readJSON("./assets/config.json").done(function(config) {
                 readJSON("./data/" + mes + ".json").done(function(data) {
                     var dataset = {};
@@ -53,17 +57,17 @@
                         var palette = d3.scale.linear()
                             .domain([0.0000000000000, 100.0000000000000])
                             .range([config[content.fillKey].min, config[content.fillKey].max])
-                        console.log(content);
                         dataset[iso] = {
+                            city: content.provincia,
                             fillKey: content.fillKey,
                             percentage: content.percentage,
                             fillColor: palette(content.percentage)
                         }
                     });
-                    console.log(dataset);
-                    var map = new Datamap({
-                        element: document.getElementById('esp'),
-                        scope: 'esp',
+                    resetElement(document.getElementById('peninsula-balears'));
+                    var peninsula_balears = new Datamap({
+                        element: document.getElementById('peninsula-balears'),
+                        scope: 'peninsula-balears',
                         geographyConfig: {
                             popupOnHover: true,
                             fills: function(geo) {
@@ -71,12 +75,12 @@
                             },
                             borderColor: '#444',
                             borderWidth: 0.5,
-                            dataUrl: './assets/esp.topo.json',
+                            dataUrl: './assets/peninsula-balears.topo.json',
                             popupTemplate: function(geo, data) {
                                 if (!data) {
                                     return;
                                 }
-                                return ['<div class="hoverinfo">Porcentaje: ', data.percentage, '</div>'].join('');
+                                return ['<div class="hoverinfo">City: ', data.city, ' Porcentaje: ', data.percentage, '</div>'].join('');
                             }
                         },
                         data: dataset,
@@ -91,70 +95,43 @@
                             };
                         }
                     });
+                    resetElement(document.getElementById('canary-islands'));
+                    var canaryDataset = {
+                        "TP": dataset["TP"]
+                    }
+                    var canary_islands = new Datamap({
+                        element: document.getElementById('canary-islands'),
+                        scope: 'canary-islands',
+                        geographyConfig: {
+                            popupOnHover: true,
+                            fills: function(geo) {
+                                return geo['fillColor'] || '#F5F5F5';
+                            },
+                            borderColor: '#444',
+                            borderWidth: 0.5,
+                            dataUrl: './assets/canary-islands.topo.json',
+                            popupTemplate: function(geo, data) {
+                                if (!data) {
+                                    return;
+                                }
+                                return ['<div class="hoverinfo">City: ', data.city, ' Porcentaje: ', data.percentage, '</div>'].join('');
+                            }
+                        },
+                        data: canaryDataset,
+                        setProjection: function(element) {
+                            var projection = d3.geo.mercator()
+                                .center([-12, 32]) // always in [East Latitude, North Longitude]
+                                .scale(4000);
+                            var path = d3.geo.path().projection(projection);
+                            return {
+                                path: path,
+                                projection: projection
+                            };
+                        }
+                    });
                 })
             });
-
-        } else {
-            console.log("Valor incorrecto.");
         }
-        /*
-        var bubble_canary_islands_map = new Datamap({
-            element: document.getElementById('canary-islands'),
-            scope: 'canary-islands',
-            geographyConfig: {
-                popupOnHover: true,
-                highlightOnHover: true,
-                borderColor: '#444',
-                borderWidth: 0.5,
-                dataUrl: './assets/canary-islands.topo.json'
-            },
-            fills: {
-                'CAN': '#F44336',
-                defaultFill: '#dddddd'
-            },
-            data: {
-                'CI': {
-                    fillKey: 'CAN'
-                }
-
-            },
-            setProjection: function(element) {
-                var projection = d3.geo.mercator()
-                    .center([-12, 32]) // always in [East Latitude, North Longitude]
-                    .scale(4000);
-                var path = d3.geo.path().projection(projection);
-                return {
-                    path: path,
-                    projection: projection
-                };
-            }
-        });
-
-        
-        isos.forEach(function(iso) {
-            var color;
-            if (dataset[iso].fillKey == 'NORTH') {
-                color = northPalette(dataset[iso].percentage)
-            } else if (dataset[iso].fillKey == 'SOUTH') {
-                color = southPalette(dataset[iso].percentage)
-            } else if (dataset[iso].fillKey == 'CENTER') {
-                color = centerPalette(dataset[iso].percentage)
-            } else if (dataset[iso].fillKey == 'EAST') {
-                color = eastPalette(dataset[iso].percentage)
-            } else if (dataset[iso].fillKey == 'CAT') {
-                color = catPalette(dataset[iso].percentage)
-            } else {
-                color = canPalette(dataset[iso].percentage)
-            }
-            dataset[iso] = {
-                fillKey: dataset[iso].fillKey,
-                percentage: dataset[iso].percentage,
-                fillColor: color
-            }
-        });
-        console.log(dataset);
-        var bubble_map */
-
     </script>
     <style>
         .row {
