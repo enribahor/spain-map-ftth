@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+    <script src="https://rawgit.com/markmarkoh/datamaps/master/dist/datamaps.world.js"></script>
+
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href="assets/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container" style="width: 100%">
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-12" align="center">
+                <h1>Comparison between spanish provincies of installed monthly optic fiber.</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-12">
+                <input type="range" min="1" max="12" value="1" class="slider" id="picker-range">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-1">
+                <p>Enero</p>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-1">
+                <p>Junio</p>
+            </div>
+            <div class="col-5"></div>
+            <div class="1">
+                <p>Diciembre</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4" id="canary-islands" style="height: 700px; width: 500px"></div>
+            <div class="col-10" id="peninsula-balears" style="height: 950px; width: 1000px"></div>
+        </div>
+    </div>
+    <script>
+        function readJSON(url) {
+            var json = $.Deferred();
+            $.getJSON(url, function(json) {
+                return json;
+            }).done(function(data) {
+                json.resolve(data)
+            });
+            return json;
+        }
+
+        function resetElement(element) {
+            element.innerHTML = '';
+        }
+        var slider = document.getElementById("picker-range");
+        slider.oninput = function() {
+            var meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+            var mes = meses[this.value - 1];
+            readJSON("./assets/config.json").done(function(config) {
+                readJSON("./data2/" + mes + ".json").done(function(data) {
+                    var dataset = {};
+                    data.data.forEach(function(object, index) {
+                        var iso = (JSON.stringify(object).split(":")[0].replace("{", "")).replace("\"", "").replace("\"", "");
+                        var content = data.data[index][iso];
+                        var palette = d3.scale.linear()
+                            .domain([0.0000000000000, 1.0000000000000])
+                            .range(["#A6CFDC", "#002D3D"])
+                        dataset[iso] = {
+                            city: content.provincia,
+                            fillKey: content.fillKey,
+                            percentage: content.percentage,
+                            fillColor: palette(content.percentage)
+                        }
+                    });
+                    resetElement(document.getElementById('peninsula-balears'));
+                    var peninsula_balears = new Datamap({
+                        element: document.getElementById('peninsula-balears'),
+                        scope: 'peninsula-balears',
+                        geographyConfig: {
+                            popupOnHover: true,
+                            fills: function(geo) {
+                                return geo['fillColor'] || '#F5F5F5';
+                            },
+                            borderColor: '#444',
+                            borderWidth: 0.0000000002,
+                            dataUrl: './assets/peninsula-balears.topo.json',
+                            popupTemplate: function(geo, data) {
+                                if (!data) {
+                                    return;
+                                }
+                                return ['<div class="hoverinfo">City: ', data.city, ' Porcentaje: ', data.percentage, '</div>'].join('');
+                            }
+                        },
+                        data: dataset,
+                        setProjection: function(element) {
+                            var projection = d3.geo.mercator()
+                                .center([-3.0, 42.433429]) // always in [East Latitude, North Longitude]
+                                .scale(4000);
+                            var path = d3.geo.path().projection(projection);
+                            return {
+                                path: path,
+                                projection: projection
+                            };
+                        }
+                    });
+                    resetElement(document.getElementById('canary-islands'));
+                    var canaryDataset = {
+                        "TP": dataset["TP"]
+                    }
+                    var canary_islands = new Datamap({
+                        element: document.getElementById('canary-islands'),
+                        scope: 'canary-islands',
+                        geographyConfig: {
+                            popupOnHover: true,
+                            fills: function(geo) {
+                                return geo['fillColor'] || '#F5F5F5';
+                            },
+                            borderColor: '#444',
+                            borderWidth: 0.5,
+                            dataUrl: './assets/canary-islands.topo.json',
+                            popupTemplate: function(geo, data) {
+                                if (!data) {
+                                    return;
+                                }
+                                return ['<div class="hoverinfo">City: ', data.city, ' Porcentaje: ', data.percentage, '</div>'].join('');
+                            }
+                        },
+                        data: canaryDataset,
+                        setProjection: function(element) {
+                            var projection = d3.geo.mercator()
+                                .center([-12, 32]) // always in [East Latitude, North Longitude]
+                                .scale(4000);
+                            var path = d3.geo.path().projection(projection);
+                            return {
+                                path: path,
+                                projection: projection
+                            };
+                        }
+                    });
+                })
+            });
+        }
+
+    </script>
+    <style>
+        .row {
+            display: auto;
+        }
+
+    </style>
+</body>
