@@ -1,27 +1,26 @@
 {
     "NORTE": {
-        "min": "#FFFDE7",
-        "max": "#FFEB3B",
-        "default": ""
+        "min": "#FFA888",
+        "max": "#EB6737"
     },
     "SUR": {
-        "min": "#E8F5E9",
-        "max": "#4CAF50"
+        "min": "#92E64C",
+        "max": "#5AC400"
     }, 
     "ESTE": {
-        "min": "#EFEBE9",
-        "max": "#795548"
+        "min": "#F390AB",
+        "max": "#DF416C"
     },
     "CENTRO": {
-        "min": "#E3F2FD",
-        "max": "#2196F3"
+        "min": "#76C8EC",
+        "max": "#24A9E0"
     },
     "CATALUNYA": {
-        "min": "#FFF3E0",
-        "max": "#FF9800"
+        "min": "#D6ABD7",
+        "max": "#954A97"
     },
     "CANARIAS": {
-        "min": "#FFEBEE",
-        "max": "#F44336"
+        "min": "#DCDCDD",
+        "max": "#87878C"
     }
 }
