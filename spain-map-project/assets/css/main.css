@@ -35,3 +35,9 @@
 #year-picker {
     -webkit-appearance: slider-vertical;
 }
+
+.line {
+    display: flex;
+    width: 1500px;
+    margin: auto;
+}

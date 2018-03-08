@@ -16,37 +16,19 @@
     <div class="col-1">
         <input type="range" min="2008" max="2017" value="2008" class="slider" id="year-picker">
     </div>
-    <div class="container" style="width: 100%">
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-12" align="center">
-                <h1>Accumulated percentage of optic feber</h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-12">
-                <input type="range" min="1" max="12" value="1" class="slider" id="picker-range">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-1">
-                <p>Enero</p>
-            </div>
-            <div class="col-4"></div>
-            <div class="col-1">
-                <p>Junio</p>
-            </div>
-            <div class="col-5"></div>
-            <div class="1">
-                <p>Diciembre</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4" id="canary-islands" style="height: 700px; width: 500px"></div>
-            <div class="col-10" id="peninsula-balears" style="height: 950px; width: 1000px"></div>
-        </div>
+    <h1 align="center">Accumulated percentage of optic feber</h1>
+    <br>
+    <div class="line">
+        <input type="range" min="1" max="12" value="1" class="slider" id="picker-range">
+    </div>
+    <div class="line">
+        <div style="width: 25%">Enero</div>
+        <div style="width: 50%; text-align: center">Junio</div>
+        <div style="width: 25%; text-align: right">Diciembre</div>
+    </div>
+    <div class="line">
+        <div id="canary-islands" style="height: 700px; width: 500px"></div>
+        <div id="peninsula-balears" style="height: 950px; width: 1000px"></div>
     </div>
     <script>
         function readJSON(url) {
