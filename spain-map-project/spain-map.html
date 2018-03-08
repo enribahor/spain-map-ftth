@@ -13,14 +13,19 @@
 </head>
 
 <body>
-    <h1 align="center">Accumulated percentage of optic feber</h1>
     <br>
     <div class="line">
-        <input type="range" min="1" max="12" value="1" class="slider years" id="picker-year">
+        <div style="width: 25%; padding-top: 15px"><img src="assets/images/back.png"></div>
+        <div style="width: 50%"><h1 align="center">Accumulated percentage of optic feber</h1></div>
+        <div style="width: 25%; padding-top: 15px"><img src="assets/images/foward.png" align="right"></div>
+    </div>
+    <br>
+    <div class="line">
+        <input type="range" min="2008" max="2017" value="2008" class="slider years" id="picker-year">
     </div>
     <div class="line">
         <div style="width: 25%">2008</div>
-        <div style="width: 50%; text-align: center">2012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div style="width: 50%; text-align: center">2012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
         <div style="width: 25%; text-align: right">2017</div>
     </div>
     <br>
@@ -56,11 +61,9 @@
             var meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
             var mes = meses[value - 1];
             var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            var years = ["2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017"];
-            var year = years[value1 - 1];
-            document.getElementById("result-title").innerHTML = "Displaying data of " + months[value - 1] + ", " + year;
+            document.getElementById("result-title").innerHTML = "Displaying data of " + months[value - 1] + ", " + value1;
             readJSON("./assets/config.json").done(function(config) {
-                readJSON("./data/" + year + "/" + mes + ".json").done(function(data) {
+                readJSON("./data/" + value1 + "/" + mes + ".json").done(function(data) {
                     var dataset = {};
                     data.data.forEach(function(object, index) {
                         var iso = (JSON.stringify(object).split(":")[0].replace("{", "")).replace("\"", "").replace("\"", "");
@@ -153,7 +156,9 @@
         slider.oninput = function() {
             createMap(this.value, yearSlider.value);
         };
-
+        yearSlider.oninput = function() {
+            createMap(slider.value, this.value);
+        }
     </script>
     <style>
         .row {
