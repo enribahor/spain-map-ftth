@@ -13,20 +13,27 @@
 </head>
 
 <body>
-    <div class="col-1">
-        <input type="range" min="2008" max="2017" value="2008" class="slider" id="year-picker">
-    </div>
     <h1 align="center">Accumulated percentage of optic feber</h1>
     <br>
     <div class="line">
-        <input type="range" min="1" max="12" value="1" class="slider" id="picker-range">
+        <input type="range" min="1" max="12" value="1" class="slider years" id="picker-year">
     </div>
     <div class="line">
-        <div style="width: 25%">Enero</div>
-        <div style="width: 50%; text-align: center">Junio</div>
-        <div style="width: 25%; text-align: right">Diciembre</div>
+        <div style="width: 25%">2008</div>
+        <div style="width: 50%; text-align: center">2012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div style="width: 25%; text-align: right">2017</div>
+    </div>
+    <br>
+    <div class="line">
+        <input type="range" min="1" max="12" value="1" class="slider months" id="picker-range">
     </div>
     <div class="line">
+        <div style="width: 25%">January</div>
+        <div style="width: 50%; text-align: center">June&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div style="width: 25%; text-align: right">December</div>
+    </div>
+    <h2 align="center" id="result-title">Displaying data of January, 2008</h2>
+    <div class="map line">
         <div id="canary-islands" style="height: 700px; width: 500px"></div>
         <div id="peninsula-balears" style="height: 950px; width: 1000px"></div>
     </div>
@@ -40,15 +47,20 @@
             });
             return json;
         }
-
+        
         function resetElement(element) {
             element.innerHTML = '';
         }
-        function createMap(value) {
+        
+        function createMap(value, value1) {
             var meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
             var mes = meses[value - 1];
+            var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            var years = ["2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017"];
+            var year = years[value1 - 1];
+            document.getElementById("result-title").innerHTML = "Displaying data of " + months[value - 1] + ", " + year;
             readJSON("./assets/config.json").done(function(config) {
-                readJSON("./data/2015/" + mes + ".json").done(function(data) {
+                readJSON("./data/" + year + "/" + mes + ".json").done(function(data) {
                     var dataset = {};
                     data.data.forEach(function(object, index) {
                         var iso = (JSON.stringify(object).split(":")[0].replace("{", "")).replace("\"", "").replace("\"", "");
@@ -132,12 +144,14 @@
                 })
             });
         }
+        
         var slider = document.getElementById("picker-range");
+        var yearSlider = document.getElementById("picker-year");
         if (slider.value == 1) {
-            this.createMap(slider.value);
+            this.createMap(slider.value, yearSlider.value);
         }
         slider.oninput = function() {
-            createMap(this.value);
+            createMap(this.value, yearSlider.value);
         };
 
     </script>

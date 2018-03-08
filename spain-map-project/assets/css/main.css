@@ -32,12 +32,17 @@
     cursor: pointer; /* Cursor on hover */
 }
 
-#year-picker {
-    -webkit-appearance: slider-vertical;
+.years::-webkit-slider-thumb {
+    background: #FA7611; /* Green background */
 }
 
 .line {
     display: flex;
     width: 1500px;
     margin: auto;
+}
+
+.relative-picker {
+    height: 950px;
+    position: absolute;
 }
