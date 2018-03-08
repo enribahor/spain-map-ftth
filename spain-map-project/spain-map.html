@@ -15,8 +15,8 @@
 <body>
     <br>
     <div class="line">
-        <div style="width: 25%; padding-top: 15px"><img src="assets/images/back.png"></div>
-        <div style="width: 50%"><h1 align="center">Accumulated percentage of optic feber</h1></div>
+        <div style="width: 25%; padding-top: 15px"><img src="assets/images/back.png" onclick="changeMap()"></div>
+        <div style="width: 50%"><h1 align="center" id="top-header">Accumulated percentage of optic feber</h1></div>
         <div style="width: 25%; padding-top: 15px"><img src="assets/images/foward.png" align="right"></div>
     </div>
     <br>
@@ -43,6 +43,15 @@
         <div id="peninsula-balears" style="height: 950px; width: 1000px"></div>
     </div>
     <script>
+        var slider = document.getElementById("picker-range");
+        var yearSlider = document.getElementById("picker-year");
+        var header = document.getElementById("top-header");
+        var firstMap = true;
+        function changeMap() {
+            firstMap = !firstMap;
+            (firstMap) ? (header.innerHTML = "Accumulated percentage of optic feber") : (header.innerHTML = "Installation effort");
+            createMap(slider.value, yearSlider.value);
+        }
         function readJSON(url) {
             var json = $.Deferred();
             $.getJSON(url, function(json) {
@@ -69,13 +78,13 @@
                         var iso = (JSON.stringify(object).split(":")[0].replace("{", "")).replace("\"", "").replace("\"", "");
                         var content = data.data[index][iso];
                         var palette = d3.scale.linear()
-                            .domain([0.0000000000000, 100.0000000000000])
-                            .range([config[content.fillKey].min, config[content.fillKey].max])
+                            .domain((firstMap) ? ([0.0000000000000, 100.0000000000000]) : ([0.0000000000000, 1.0000000000000]))
+                            .range((firstMap) ? ([config[content.fillKey].min, config[content.fillKey].max]) : (["#A6CFDC", "#002D3D"]))
                         dataset[iso] = {
                             city: content.provincia,
                             fillKey: content.fillKey,
-                            percentage: content.percentage_acc,
-                            fillColor: palette(content.percentage_acc)
+                            percentage: (firstMap) ? (content.percentage_acc) : (content.increment),
+                            fillColor: (firstMap) ? (palette(content.percentage_acc)) : (palette(content.increment))
                         }
                     });
                     resetElement(document.getElementById('peninsula-balears'));
@@ -148,8 +157,6 @@
             });
         }
         
-        var slider = document.getElementById("picker-range");
-        var yearSlider = document.getElementById("picker-year");
         if (slider.value == 1) {
             this.createMap(slider.value, yearSlider.value);
         }
