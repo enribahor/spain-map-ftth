@@ -31,3 +31,7 @@
     background: #4CAF50; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
+
+#year-picker {
+    -webkit-appearance: slider-vertical;
+}

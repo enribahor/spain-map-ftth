@@ -13,6 +13,9 @@
 </head>
 
 <body>
+    <div class="col-1">
+        <input type="range" min="2008" max="2017" value="2008" class="slider" id="year-picker">
+    </div>
     <div class="container" style="width: 100%">
         <div class="row">
             <div class="col-1"></div>
@@ -63,7 +66,7 @@
             var meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
             var mes = meses[value - 1];
             readJSON("./assets/config.json").done(function(config) {
-                readJSON("./data/" + mes + ".json").done(function(data) {
+                readJSON("./data/2015/" + mes + ".json").done(function(data) {
                     var dataset = {};
                     data.data.forEach(function(object, index) {
                         var iso = (JSON.stringify(object).split(":")[0].replace("{", "")).replace("\"", "").replace("\"", "");
