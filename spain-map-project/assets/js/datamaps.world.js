@@ -106,7 +106,7 @@
     }
   }
 
-  function addContainer( element, height, width ) {
+  function addContainer( element, height, width ) { 
     this.svg = d3.select( element ).append('svg')
       .attr('width', width || element.offsetWidth)
       .attr('data-width', width || element.offsetWidth)
@@ -284,6 +284,7 @@
         });
     }
 
+      // Hover function.
     function moveToFront() {
       this.parentNode.appendChild(this);
     }
@@ -699,7 +700,6 @@
   ***************************************/
 
   function Datamap( options ) {
-
     if ( typeof d3 === 'undefined' || typeof topojson === 'undefined' ) {
       throw new Error('Include d3.js (v3.0.3 or greater) and topojson on this page before creating a new map');
    }
@@ -710,6 +710,7 @@
     this.options.bubblesConfig = defaults(options.bubblesConfig, defaultOptions.bubblesConfig);
     this.options.arcConfig = defaults(options.arcConfig, defaultOptions.arcConfig);
 
+      //document.getElementById('peninsula-balears').select('svg') = "";
     // Add the SVG container
     if ( d3.select( this.options.element ).select('svg').length > 0 ) {
       addContainer.call(this, this.options.element, this.options.height, this.options.width );
