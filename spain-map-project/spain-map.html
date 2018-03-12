@@ -39,8 +39,12 @@
     </div>
     <h2 align="center" id="result-title">Displaying data of January, 2008</h2>
     <div class="map line">
-        <div id="canary-islands" style="height: 700px; width: 500px"></div>
-        <div id="peninsula-balears" style="height: 950px; width: 1000px"></div>
+        <div class="child" style="height: 700px; width: 500px">
+            <div id="canary-islands" style="height: 700px; width: 500px"></div>
+        </div>
+        <div class="child" style="height: 950px; width: 1000px">
+            <div id="peninsula-balears" style="height: 950px; width: 1000px"></div>
+        </div>
     </div>
     <script>
         var slider = document.getElementById("picker-range");
