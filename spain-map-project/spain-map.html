@@ -77,12 +77,13 @@
             document.getElementById("result-title").innerHTML = "Displaying data of " + months[value - 1] + ", " + value1;
             readJSON("./assets/config.json").done(function(config) {
                 readJSON("./data/" + value1 + "/" + mes + ".json").done(function(data) {
+                    console.log(data);
                     var dataset = {};
                     data.data.forEach(function(object, index) {
                         var iso = (JSON.stringify(object).split(":")[0].replace("{", "")).replace("\"", "").replace("\"", "");
                         var content = data.data[index][iso];
                         var palette = d3.scale.linear()
-                            .domain((firstMap) ? ([0.0000000000000, 100.0000000000000]) : ([0.0000000000000, 1.0000000000000]))
+                            .domain((firstMap) ? ([0.00000000000000000000, 100.00000000000000000000]) : ([0.00000000000000000000, 1.00000000000000000000]))
                             .range((firstMap) ? ([config[content.fillKey].min, config[content.fillKey].max]) : (["#A6CFDC", "#002D3D"]))
                         dataset[iso] = {
                             city: content.provincia,
